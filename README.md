@@ -22,8 +22,14 @@ const datenschutz = await client.getPrivacyPolicy();   // German HTML
 const socialMedia = await client.getPrivacyPolicySocialMedia();
 
 // English versions
-const imprintEn = await client.getImprint('en');
-const privacyEn = await client.getPrivacyPolicy('en');
+const imprintEn = await client.getImprint({ lang: 'en' });
+const privacyEn = await client.getPrivacyPolicy({ lang: 'en' });
+
+// Strip the first <h1> from the response (useful when you provide your own heading)
+const impressumNoH1 = await client.getImprint({ stripH1: true });
+
+// Combine options
+const privacyEnNoH1 = await client.getPrivacyPolicy({ lang: 'en', stripH1: true });
 ```
 
 ## Astro Example
@@ -33,7 +39,7 @@ const privacyEn = await client.getPrivacyPolicy('en');
 import { createClient } from '@jehu/erecht24-client';
 
 const client = createClient({ apiKey: import.meta.env.ERECHT24_API_KEY });
-const html = await client.getImprint();
+const html = await client.getImprint({ stripH1: true });
 ---
 
 <div set:html={html} />
@@ -43,17 +49,23 @@ const html = await client.getImprint();
 
 ### `createClient(options)`
 
-| Option   | Type     | Description          |
-|----------|----------|----------------------|
-| `apiKey` | `string` | eRecht24 API key     |
+| Option      | Type     | Required | Description                              |
+|-------------|----------|----------|------------------------------------------|
+| `apiKey`    | `string` | yes      | eRecht24 project API key                 |
+| `pluginKey` | `string` | no       | eRecht24 developer key (default provided)|
 
 Returns a client with:
 
-- `getImprint(lang?)` — Fetch Impressum HTML
-- `getPrivacyPolicy(lang?)` — Fetch Datenschutzerklärung HTML
-- `getPrivacyPolicySocialMedia(lang?)` — Fetch Social Media Privacy Policy HTML
+- `getImprint(opts?)` — Fetch Impressum HTML
+- `getPrivacyPolicy(opts?)` — Fetch Datenschutzerklärung HTML
+- `getPrivacyPolicySocialMedia(opts?)` — Fetch Social Media Privacy Policy HTML
 
-`lang` is optional: `'de'` (default) or `'en'`.
+### Fetch Options
+
+| Option    | Type              | Default | Description                          |
+|-----------|-------------------|---------|--------------------------------------|
+| `lang`    | `'de'` \| `'en'`  | `'de'`  | Language of the returned HTML        |
+| `stripH1` | `boolean`         | `false` | Remove the first `<h1>` from output |
 
 ## Requirements
 
