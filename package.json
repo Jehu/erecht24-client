@@ -1,0 +1,26 @@
+{
+  "name": "@jehu/erecht24-client",
+  "version": "1.0.0",
+  "description": "Lightweight eRecht24 API client for fetching Impressum and Datenschutz content",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": ["erecht24", "impressum", "datenschutz", "dsgvo", "legal"],
+  "author": "Marco Michely",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jehu/erecht24-client.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
