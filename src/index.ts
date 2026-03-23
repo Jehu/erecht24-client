@@ -11,6 +11,15 @@ export interface ERecht24Document {
 
 export type Lang = 'de' | 'en';
 
+export interface FetchOptions {
+  lang?: Lang;
+  stripH1?: boolean;
+}
+
+function removeFirstH1(html: string): string {
+  return html.replace(/<h1[^>]*>.*?<\/h1>\s*/i, '');
+}
+
 const DEFAULT_PLUGIN_KEY = '3jh4uhn8u69i97kj9timk466748996ikhkjhlk67plli08lhkijgh8z4363gr53v';
 
 export interface ERecht24Options {
@@ -21,7 +30,7 @@ export interface ERecht24Options {
 export function createClient(options: ERecht24Options) {
   const { apiKey, pluginKey = DEFAULT_PLUGIN_KEY } = options;
 
-  async function fetchDocument(endpoint: string, lang: Lang = 'de'): Promise<string> {
+  async function fetchDocument(endpoint: string, lang: Lang = 'de', stripH1: boolean = false): Promise<string> {
     const res = await fetch(`${API_BASE}${endpoint}`, {
       headers: {
         'eRecht24-api-key': apiKey,
@@ -34,12 +43,14 @@ export function createClient(options: ERecht24Options) {
     }
 
     const data: ERecht24Document = await res.json();
-    return lang === 'en' ? data.html_en : data.html_de;
+    let html = lang === 'en' ? data.html_en : data.html_de;
+    if (stripH1) html = removeFirstH1(html);
+    return html;
   }
 
   return {
-    getImprint: (lang: Lang = 'de') => fetchDocument('/imprint', lang),
-    getPrivacyPolicy: (lang: Lang = 'de') => fetchDocument('/privacyPolicy', lang),
-    getPrivacyPolicySocialMedia: (lang: Lang = 'de') => fetchDocument('/privacyPolicySocialMedia', lang),
+    getImprint: (opts: FetchOptions = {}) => fetchDocument('/imprint', opts.lang ?? 'de', opts.stripH1 ?? false),
+    getPrivacyPolicy: (opts: FetchOptions = {}) => fetchDocument('/privacyPolicy', opts.lang ?? 'de', opts.stripH1 ?? false),
+    getPrivacyPolicySocialMedia: (opts: FetchOptions = {}) => fetchDocument('/privacyPolicySocialMedia', opts.lang ?? 'de', opts.stripH1 ?? false),
   };
 }
