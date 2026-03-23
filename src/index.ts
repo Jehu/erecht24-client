@@ -11,17 +11,21 @@ export interface ERecht24Document {
 
 export type Lang = 'de' | 'en';
 
+const DEFAULT_PLUGIN_KEY = '3jh4uhn8u69i97kj9timk466748996ikhkjhlk67plli08lhkijgh8z4363gr53v';
+
 export interface ERecht24Options {
   apiKey: string;
+  pluginKey?: string;
 }
 
 export function createClient(options: ERecht24Options) {
-  const { apiKey } = options;
+  const { apiKey, pluginKey = DEFAULT_PLUGIN_KEY } = options;
 
   async function fetchDocument(endpoint: string, lang: Lang = 'de'): Promise<string> {
     const res = await fetch(`${API_BASE}${endpoint}`, {
       headers: {
         'eRecht24-api-key': apiKey,
+        'eRecht24-plugin-key': pluginKey,
       },
     });
 
