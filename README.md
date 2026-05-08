@@ -32,13 +32,38 @@ const impressumNoH1 = await client.getImprint({ stripH1: true });
 const privacyEnNoH1 = await client.getPrivacyPolicy({ lang: 'en', stripH1: true });
 ```
 
+## Caching
+
+The client supports optional disk caching. When enabled, successful API
+responses are cached as JSON files. On API failure, the cached document is
+used transparently — no placeholder content, no silent failures. If both
+API and cache are unavailable, the error propagates so builds fail loud.
+
+```ts
+import { createClient } from '@jehu/erecht24-client';
+
+const client = createClient({
+  apiKey: 'your-erecht24-api-key',
+  cacheDir: 'src/lib/erecht24-cache', // enables disk caching
+});
+
+// Normal usage — cache is updated on success, used on failure
+const impressum = await client.getImprint({ stripH1: true });
+```
+
+The cache directory should be committed to your repository so
+fresh clones have a valid fallback.
+
 ## Astro Example
 
 ```astro
 ---
 import { createClient } from '@jehu/erecht24-client';
 
-const client = createClient({ apiKey: import.meta.env.ERECHT24_API_KEY });
+const client = createClient({
+  apiKey: import.meta.env.ERECHT24_API_KEY,
+  cacheDir: 'src/lib/erecht24-cache',
+});
 const html = await client.getImprint({ stripH1: true });
 ---
 
@@ -53,6 +78,7 @@ const html = await client.getImprint({ stripH1: true });
 |-------------|----------|----------|------------------------------------------|
 | `apiKey`    | `string` | yes      | eRecht24 project API key                 |
 | `pluginKey` | `string` | no       | eRecht24 developer key (default provided)|
+| `cacheDir`  | `string` | no       | Directory for disk cache (enables caching)|
 
 Returns a client with:
 
