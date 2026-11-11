@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "erecht24_client",
+  "project_id": "a183d780-13af-422c-b063-7e698d0db343"
+}
