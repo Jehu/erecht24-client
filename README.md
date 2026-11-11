@@ -1,4 +1,4 @@
-# @jehu/erecht24-client
+# @michelyweb/erecht24-client
 
 Lightweight eRecht24 API client for fetching Impressum, Datenschutz and Social Media Privacy Policy content.
 
@@ -7,13 +7,13 @@ Zero dependencies, TypeScript, works with any framework (Astro, SvelteKit, Next.
 ## Installation
 
 ```bash
-npm install @jehu/erecht24-client --registry=https://npm.pkg.github.com
+npm install @michelyweb/erecht24-client
 ```
 
 ## Usage
 
 ```ts
-import { createClient } from '@jehu/erecht24-client';
+import { createClient } from '@michelyweb/erecht24-client';
 
 const client = createClient({ apiKey: 'your-erecht24-api-key' });
 
@@ -40,7 +40,7 @@ used transparently — no placeholder content, no silent failures. If both
 API and cache are unavailable, the error propagates so builds fail loud.
 
 ```ts
-import { createClient } from '@jehu/erecht24-client';
+import { createClient } from '@michelyweb/erecht24-client';
 
 const client = createClient({
   apiKey: 'your-erecht24-api-key',
@@ -58,7 +58,7 @@ fresh clones have a valid fallback.
 
 ```astro
 ---
-import { createClient } from '@jehu/erecht24-client';
+import { createClient } from '@michelyweb/erecht24-client';
 
 const client = createClient({
   apiKey: import.meta.env.ERECHT24_API_KEY,
